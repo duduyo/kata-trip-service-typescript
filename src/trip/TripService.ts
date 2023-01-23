@@ -16,20 +16,9 @@ export default class TripService {
 
         this.assertUserIsLogged(loggedUser);
 
-        return this.areFriends(user, loggedUser)
+        return user.isFriend(loggedUser!)
             ? this.findTrips(user)
             : NO_TRIPS;
-    }
-
-    private areFriends(user: User, loggedUser: User | null) {
-        let isFriend = false;
-        for (const friend of user.getFriends()) {
-            if (friend === loggedUser) {
-                isFriend = true;
-                break;
-            }
-        }
-        return isFriend;
     }
 
     private assertUserIsLogged(loggedUser: User | null) {
