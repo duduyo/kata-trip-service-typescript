@@ -4,6 +4,7 @@ import UserSession from "../user/UserSession";
 import Trip from "./Trip";
 import TripDAO from "./TripDAO";
 
+const NO_TRIPS: Trip[] = [];
 export default class TripService {
 
     public getTripsByUser(user: User): Trip[] {
@@ -12,23 +13,27 @@ export default class TripService {
     }
 
     getTrips(loggedUser: User | null, user: User) {
-        let tripList: Trip[] = [];
+
+        this.assertUserIsLogged(loggedUser);
+
+        return this.areFriends(user, loggedUser)
+            ? this.findTrips(user)
+            : NO_TRIPS;
+    }
+
+    private areFriends(user: User, loggedUser: User | null) {
         let isFriend = false;
-
-        if (loggedUser != null) {
-            for (const friend of user.getFriends()) {
-                if (friend === loggedUser) {
-                    isFriend = true;
-                    break;
-                }
+        for (const friend of user.getFriends()) {
+            if (friend === loggedUser) {
+                isFriend = true;
+                break;
             }
+        }
+        return isFriend;
+    }
 
-            if (isFriend) {
-                tripList = this.findTrips(user);
-            }
-
-            return tripList;
-        } else {
+    private assertUserIsLogged(loggedUser: User | null) {
+        if (loggedUser == null) {
             throw new UserNotLoggedInException();
         }
     }
