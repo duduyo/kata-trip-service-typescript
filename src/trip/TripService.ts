@@ -33,7 +33,7 @@ export default class TripService {
         }
     }
 
-    protected findTrips(user: User) {
+    findTrips(user: User) {
         return TripDAO.findTripsByUser(user);
     }
 }

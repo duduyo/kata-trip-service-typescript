@@ -31,13 +31,16 @@ describe("TripService", () => {
         friendUser.addTrip(PARIS)
 
         // Méthode simple pour créer un stub
-        const testableTripService = new (class extends TripService{
-            protected findTrips(user: User): Trip[] {
-                return user.getTrips()
-            }
-        })();
+        // const testableTripService = new (class extends TripService{
+        //     protected findTrips(user: User): Trip[] {
+        //         return user.getTrips()
+        //     }
+        // })();
 
-        expect(testableTripService.getTrips(LOGGED_USER, friendUser)).to.have.ordered.members([TOULOUSE, PARIS])
+        // Utilisation d'une librairie
+        sinon.stub(tripService, 'findTrips').withArgs(friendUser).returns([TOULOUSE, PARIS])
+
+        expect(tripService.getTrips(LOGGED_USER, friendUser)).to.have.ordered.members([TOULOUSE, PARIS])
     });
 
 });
