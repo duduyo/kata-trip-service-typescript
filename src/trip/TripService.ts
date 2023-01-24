@@ -8,6 +8,10 @@ export default class TripService {
 
     public getTripsByUser(user: User): Trip[] {
         const loggedUser: User | null = UserSession.getLoggedUser();
+        return this.getTrips(loggedUser, user);
+    }
+
+    getTrips(loggedUser: User | null, user: User) {
         let tripList: Trip[] = [];
         let isFriend = false;
 
@@ -28,5 +32,4 @@ export default class TripService {
             throw new UserNotLoggedInException();
         }
     }
-
 }
